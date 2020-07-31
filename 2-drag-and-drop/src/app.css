@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+form {
+  margin-left: 20px;
+}
+
+.form-control {
+  margin: 20px auto;
+}
+
+label {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+input,
+textarea {
+  width: 80%;
+  font-size: 1.2rem;
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 5px;
+  line-height: 1.6;
+}
+
+input:focus,
+textarea:focus {
+  border: 1px solid rgb(35, 102, 190);
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  background-color: rgb(231, 51, 141);
+  font-size: 1.2rem;
+  color: white;
+  padding: 8px 10px;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px #eee;
+  cursor: pointer;
+}
+
+#active-projects {
+}
+
+#finished-projects {
+}
+
+.droppable {
+  background: #ffe3ee;
+}
+
+#finished-projects .droppable {
+  background: #d6e1ff;
+}
+
+#user-input {
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid #ff0062;
+  background: #f7f7f7;
+  border-radius: 5px;
+}
