@@ -1,7 +1,10 @@
+:root {
+  font-size: 10px;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-size: 10px;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -21,14 +24,15 @@ form {
 
 label {
   display: block;
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 input,
 textarea {
   width: 80%;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   padding: 4px 10px;
   border: 1px solid #ccc;
   outline: none;
@@ -46,20 +50,41 @@ textarea {
 }
 
 button {
-  background-color: rgb(231, 51, 141);
-  font-size: 1.2rem;
+  background-color: rgb(75, 165, 48);
+  font-size: 1.6rem;
   color: white;
   padding: 8px 10px;
   outline: none;
   border-radius: 5px;
-  box-shadow: 0 2px 2px #eee;
+  box-shadow: 0 2px 2px #EEE;
+  border: 1px solid #CCC;
   cursor: pointer;
 }
 
-#active-projects {
+.projects {
+  border: 1px solid #ff0062;
+  margin: 1rem;
 }
 
-#finished-projects {
+.projects header {
+  font-size: 1.8rem;
+  text-align: center;
+  font-weight: bolder;
+  padding: 1.6rem;
+}
+
+.projects header h2 {
+  margin: 0;
+  color: white;
+}
+
+#active-projects header {
+  background-color: #ff0062;
+}
+
+#finished-projects header {
+  background-color: blue;
+
 }
 
 .droppable {
@@ -76,4 +101,31 @@ button {
   border: 1px solid #ff0062;
   background: #f7f7f7;
   border-radius: 5px;
+}
+
+ul {
+  list-style: none;
+  font-size: 1.8rem;
+  padding: 0 10%;
+}
+
+li {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px #CCC;
+  padding: 10px;
+  cursor: pointer;
+  margin: 20px 0;
+}
+
+li:hover {
+  box-shadow: 3px 3px 5px #BBB;
+}
+
+#active-projects li h2 {
+  color: rgb(240, 50, 91);
+}
+
+#finished-projects li h2 {
+  color: rgb(85, 50, 240);
 }

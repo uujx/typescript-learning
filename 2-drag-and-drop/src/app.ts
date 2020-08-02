@@ -1,3 +1,68 @@
+// Project status enum
+enum ProjectStatus {
+  ACTIVE,
+  FINISHED
+}
+
+// Project class
+class Project {
+  constructor(
+    public id: string,
+    public title: string,
+    public description: string,
+    public people: number,
+    public status: ProjectStatus
+  ) {}
+}
+
+// Listener type
+type Listener<T> = (items: T[]) => void
+
+// State base class
+abstract class State<T> {
+  protected listeners: Listener<T>[] = []
+
+  public addListener(fn: Listener<T>) {
+    this.listeners.push(fn)
+  }
+}
+
+// Singleton project state
+class ProjectState extends State<Project> {
+  private projects: Project[] = []
+  // Observer pattern
+
+  private static instance: ProjectState
+
+  private constructor() {
+    super()
+  }
+
+  public addProject(title: string, description: string, people: number) {
+    const newProject = new Project(
+      Math.random().toString(),
+      title,
+      description,
+      people,
+      ProjectStatus.ACTIVE
+    )
+    this.projects.push(newProject)
+
+    this.listeners.forEach((fn) => {
+      fn(this.projects.slice())
+    })
+  }
+
+  static getInstance(): ProjectState {
+    if (!this.instance) {
+      this.instance = new ProjectState()
+    }
+    return this.instance
+  }
+}
+
+const projectState = ProjectState.getInstance()
+
 // autobind method decorator
 function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
   const originalMethod = descriptor.value
@@ -46,24 +111,120 @@ function validation(input: Validatable): boolean {
   return isValid
 }
 
-// ProjectInput Class
-class ProjectInput {
-  private templateEl: HTMLTemplateElement
-  private hostEl: HTMLDivElement
-  private element: HTMLFormElement
+abstract class Component<T extends HTMLElement, U extends HTMLElement> {
+  protected templateEl: HTMLTemplateElement
+  protected hostEl: T
+  protected element: U
+
+  constructor(
+    templateId: string,
+    hostId: string,
+    insertAtStart: boolean,
+    elementId: string
+  ) {
+    this.templateEl = document.getElementById(
+      templateId
+    )! as HTMLTemplateElement
+    this.hostEl = document.getElementById(hostId)! as T
+
+    const importedNode = document.importNode(this.templateEl.content, true)
+    this.element = importedNode.firstElementChild as U
+    this.element.id = elementId || ''
+
+    this.attach(insertAtStart)
+  }
+
+  private attach(insertAtStart: boolean) {
+    this.hostEl.insertAdjacentElement(
+      insertAtStart ? 'afterbegin' : 'beforeend',
+      this.element
+    )
+  }
+
+  abstract configure(): void
+  abstract renderContent(): void
+}
+
+// ProjectItem class
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+  get person() {
+    if (this.project.people === 1) {
+      return '1 person'
+    } else {
+      return `${this.project.people} persons`
+    }
+  }
+
+  constructor(hostId: string, private project: Project) {
+    super('single-project', hostId, false, project.id)
+
+    this.renderContent()
+  }
+
+  public configure() {}
+
+  public renderContent() {
+    this.element.querySelector('h2')!.textContent = this.project.title 
+    this.element.querySelector('h3')!.textContent = this.person + ' assigned'
+    this.element.querySelector('p')!.textContent = this.project.description
+  }
+}
+
+// ProjectList class
+class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+  private projects: any[]
+
+  constructor(private type: 'active' | 'finished') {
+    super('project-list', 'app', false, `${type}-projects`)
+    this.projects = []
+
+    this.configure()
+    this.renderContent()
+  }
+
+  public configure() {
+    projectState.addListener((projects: Project[]) => {
+      const relevantProjects = projects.filter((project) => {
+        if (this.type === 'active') {
+          return project.status === ProjectStatus.ACTIVE
+        } else {
+          return project.status === ProjectStatus.FINISHED
+        }
+      })
+
+      this.projects = relevantProjects
+
+      this.renderProjects()
+    })
+  }
+
+  public renderContent() {
+    const listId = `${this.type}-projects-list`
+    this.element.querySelector('ul')!.id = listId
+
+    const title = this.type.toUpperCase() + ' PROJECTS'
+    this.element.querySelector('h2')!.textContent = title
+  }
+
+  private renderProjects() {
+    const listId = `${this.type}-projects-list`
+    const listEl = document.getElementById(listId)! as HTMLUListElement
+
+    listEl.innerHTML = ''
+    for (const project of this.projects) {
+      new ProjectItem(listId, project)
+    }
+  }
+}
+
+// ProjectInput class
+class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   private titleInputEl: HTMLInputElement
   private descriptionInputEl: HTMLInputElement
   private peopleInputEl: HTMLInputElement
 
   constructor() {
-    this.templateEl = document.getElementById(
-      'project-input'
-    )! as HTMLTemplateElement
-    this.hostEl = document.getElementById('app')! as HTMLDivElement
-
-    const importedNode = document.importNode(this.templateEl.content, true)
-    this.element = importedNode.firstElementChild as HTMLFormElement
-    this.element.id = 'user-input'
+    super('project-input', 'app', true, 'user-input')
 
     this.titleInputEl = this.element.querySelector(
       '#title'
@@ -76,16 +237,13 @@ class ProjectInput {
     )! as HTMLInputElement
 
     this.configure()
-    this.attach()
   }
 
-  private configure() {
+  public configure() {
     this.element.addEventListener('submit', this.submitHandler)
   }
 
-  private attach() {
-    this.hostEl.insertAdjacentElement('afterbegin', this.element)
-  }
+  public renderContent() {}
 
   @Autobind
   private submitHandler(event: Event) {
@@ -94,7 +252,8 @@ class ProjectInput {
     const userInputs = this.getUserInputs()
     if (userInputs) {
       const [title, desc, people] = userInputs
-      console.log(title, desc, people)
+
+      projectState.addProject(title, desc, people)
 
       this.clearInputs()
     }
@@ -144,3 +303,5 @@ class ProjectInput {
 }
 
 const projectInput = new ProjectInput()
+const activeProjects = new ProjectList('active')
+const finishedProjects = new ProjectList('finished')
