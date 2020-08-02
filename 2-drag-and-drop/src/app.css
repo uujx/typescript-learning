@@ -6,7 +6,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: black;
+  background-color: #1ABC9C;
 }
 
 *,
@@ -51,8 +51,9 @@ textarea {
 }
 
 button {
-  background-color: rgb(75, 165, 48);
-  font-size: 1.6rem;
+  background-color: #1ABC9C;
+  font-size: 1.7rem;
+  font-weight: 600;
   color: white;
   padding: 8px 10px;
   outline: none;
@@ -64,13 +65,21 @@ button {
 }
 
 .projects {
-  border: 1px solid #ff0062;
+  border-radius: 5px;
   margin: 3rem;
   width: 70%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  border-radius: 5px;
+  background-color: #EDEFF1;
+}
+
+#active-projects {
+  border: 1px solid red;
+}
+
+#finished-projects {
+  border: 1px solid blue;
 }
 
 .projects header {
@@ -86,11 +95,11 @@ button {
 }
 
 #active-projects header {
-  background-color: #ff0062;
+  background-color: #E74C3C;
 }
 
 #finished-projects header {
-  background-color: blue;
+  background-color: rgb(52, 101, 190);
 
 }
 
@@ -99,7 +108,7 @@ button {
 }
 
 #finished-projects .droppable {
-  background: #d6e1ff;
+  background: #ccdaff;
 }
 
 #user-input {
@@ -109,15 +118,14 @@ button {
   transform: translateX(-50%);
   margin: 1rem;
   padding: 1rem;
-  border: 1px solid #ff0062;
-  background: #5d5050;
+  background: #EDEFF1;
   border-radius: 5px;
 }
 
 ul {
   list-style: none;
   font-size: 1.8rem;
-  padding: 0 10%;
+  padding: 5px 10%;
   margin: 0;
 }
 
@@ -140,5 +148,5 @@ li:hover {
 }
 
 #finished-projects li h2 {
-  color: rgb(38, 34, 238);
+  color: rgb(52, 101, 190)
 }
