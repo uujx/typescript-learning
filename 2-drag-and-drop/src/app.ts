@@ -4,7 +4,7 @@ enum ProjectStatus {
   FINISHED
 }
 
-// Project class
+// Project data class
 class Project {
   constructor(
     public id: string,
@@ -38,16 +38,33 @@ class ProjectState extends State<Project> {
     super()
   }
 
-  public addProject(title: string, description: string, people: number) {
+  addProject(
+    title: string,
+    description: string,
+    people: number,
+    status: ProjectStatus = ProjectStatus.ACTIVE
+  ) {
     const newProject = new Project(
-      Math.random().toString(),
+      Math.random().toString(), // TODO: fix the id generation
       title,
       description,
       people,
-      ProjectStatus.ACTIVE
+      status
     )
     this.projects.push(newProject)
 
+    this.updateListeners()
+  }
+
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const project = this.projects.find((project) => project.id === projectId)
+    if (project) {
+      project.status = newStatus
+      this.updateListeners()
+    }
+  }
+
+  private updateListeners() {
     this.listeners.forEach((fn) => {
       fn(this.projects.slice())
     })
@@ -145,8 +162,23 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   abstract renderContent(): void
 }
 
+// drag & drop interfaces
+interface Draggable {
+  dragStartHandler(event: DragEvent): void
+  dragEndHandler(event: DragEvent): void
+}
+
+interface DragTarget {
+  dragOverHandler(event: DragEvent): void
+  dragLeaveHandler(event: DragEvent): void
+  dropHandler(event: DragEvent): void
+}
+
 // ProjectItem class
-class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement>
+  implements Draggable {
+  private project: Project
+
   get person() {
     if (this.project.people === 1) {
       return '1 person'
@@ -155,23 +187,40 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
     }
   }
 
-  constructor(hostId: string, private project: Project) {
+  constructor(hostId: string, project: Project) {
     super('single-project', hostId, false, project.id)
 
+    this.project = project
+
+    this.configure()
     this.renderContent()
   }
 
-  public configure() {}
+  configure() {
+    this.element.addEventListener('dragstart', this.dragStartHandler)
+    this.element.addEventListener('dragend', this.dragEndHandler)
+  }
 
-  public renderContent() {
-    this.element.querySelector('h2')!.textContent = this.project.title 
+  renderContent() {
+    this.element.querySelector('h2')!.textContent = this.project.title
     this.element.querySelector('h3')!.textContent = this.person + ' assigned'
     this.element.querySelector('p')!.textContent = this.project.description
+  }
+
+  @Autobind
+  dragStartHandler(event: DragEvent) {
+    event.dataTransfer!.setData('text/plain', this.project.id)
+    event.dataTransfer!.effectAllowed = 'move'
+  }
+
+  dragEndHandler(event: DragEvent) {
+    console.log('drag end')
   }
 }
 
 // ProjectList class
-class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+class ProjectList extends Component<HTMLDivElement, HTMLElement>
+  implements DragTarget {
   private projects: any[]
 
   constructor(private type: 'active' | 'finished') {
@@ -182,7 +231,11 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     this.renderContent()
   }
 
-  public configure() {
+  configure() {
+    this.element.addEventListener('dragover', this.dragOverHandler)
+    this.element.addEventListener('dragleave', this.dragLeaveHandler)
+    this.element.addEventListener('drop', this.dropHandler)
+
     projectState.addListener((projects: Project[]) => {
       const relevantProjects = projects.filter((project) => {
         if (this.type === 'active') {
@@ -198,7 +251,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     })
   }
 
-  public renderContent() {
+  renderContent() {
     const listId = `${this.type}-projects-list`
     this.element.querySelector('ul')!.id = listId
 
@@ -214,6 +267,33 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     for (const project of this.projects) {
       new ProjectItem(listId, project)
     }
+  }
+
+  @Autobind
+  dragOverHandler(event: DragEvent) {
+    if (event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
+      event.preventDefault()
+      const listEl = this.element.querySelector('ul')!
+      listEl.classList.add('droppable')
+    }
+  }
+
+  @Autobind
+  dropHandler(event: DragEvent) {
+    const projectId = event.dataTransfer!.getData('text/plain')
+    projectState.moveProject(
+      projectId,
+      this.type === 'active' ? ProjectStatus.ACTIVE : ProjectStatus.FINISHED
+    )
+
+    const listEl = this.element.querySelector('ul')!
+    listEl.classList.remove('droppable')
+  }
+
+  @Autobind
+  dragLeaveHandler(event: DragEvent) {
+    const listEl = this.element.querySelector('ul')!
+    listEl.classList.remove('droppable')
   }
 }
 
@@ -239,11 +319,11 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     this.configure()
   }
 
-  public configure() {
+  configure() {
     this.element.addEventListener('submit', this.submitHandler)
   }
 
-  public renderContent() {}
+  renderContent() {}
 
   @Autobind
   private submitHandler(event: Event) {
@@ -280,7 +360,7 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
       value: people,
       required: true,
       min: 1,
-      max: 5
+      max: 20000
     }
 
     if (
@@ -302,6 +382,28 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   }
 }
 
+// Initiate the app
 const projectInput = new ProjectInput()
 const activeProjects = new ProjectList('active')
 const finishedProjects = new ProjectList('finished')
+
+projectState.addProject(
+  'TikTok',
+  'A short video sharing platform used by almost a billion people around the world.',
+  10000,
+  ProjectStatus.FINISHED
+)
+
+projectState.addProject(
+  'WeChat',
+  'An intant messaging app that is used by almost everyone in China.',
+  15000,
+  ProjectStatus.FINISHED
+)
+
+projectState.addProject(
+  'Timeline',
+  'A timeline app in development that aims to help people learn history by visualizing the timeline.',
+  1,
+  ProjectStatus.ACTIVE
+)

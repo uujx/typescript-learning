@@ -6,6 +6,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: black;
 }
 
 *,
@@ -19,7 +20,7 @@ form {
 }
 
 .form-control {
-  margin: 20px auto;
+  margin: 20px;
 }
 
 label {
@@ -31,7 +32,7 @@ label {
 
 input,
 textarea {
-  width: 80%;
+  width: 100%;
   font-size: 1.6rem;
   padding: 4px 10px;
   border: 1px solid #ccc;
@@ -59,11 +60,17 @@ button {
   box-shadow: 0 2px 2px #EEE;
   border: 1px solid #CCC;
   cursor: pointer;
+  margin: 0 0 10px 20px;
 }
 
 .projects {
   border: 1px solid #ff0062;
-  margin: 1rem;
+  margin: 3rem;
+  width: 70%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
 }
 
 .projects header {
@@ -96,10 +103,14 @@ button {
 }
 
 #user-input {
+  position: relative;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 1rem;
   padding: 1rem;
   border: 1px solid #ff0062;
-  background: #f7f7f7;
+  background: #5d5050;
   border-radius: 5px;
 }
 
@@ -107,6 +118,7 @@ ul {
   list-style: none;
   font-size: 1.8rem;
   padding: 0 10%;
+  margin: 0;
 }
 
 li {
@@ -116,6 +128,7 @@ li {
   padding: 10px;
   cursor: pointer;
   margin: 20px 0;
+  background: white;
 }
 
 li:hover {
@@ -127,5 +140,5 @@ li:hover {
 }
 
 #finished-projects li h2 {
-  color: rgb(85, 50, 240);
+  color: rgb(38, 34, 238);
 }

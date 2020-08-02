@@ -11,7 +11,7 @@ var ProjectStatus;
     ProjectStatus[ProjectStatus["ACTIVE"] = 0] = "ACTIVE";
     ProjectStatus[ProjectStatus["FINISHED"] = 1] = "FINISHED";
 })(ProjectStatus || (ProjectStatus = {}));
-// Project class
+// Project data class
 class Project {
     constructor(id, title, description, people, status) {
         this.id = id;
@@ -36,9 +36,20 @@ class ProjectState extends State {
         super();
         this.projects = [];
     }
-    addProject(title, description, people) {
-        const newProject = new Project(Math.random().toString(), title, description, people, ProjectStatus.ACTIVE);
+    addProject(title, description, people, status = ProjectStatus.ACTIVE) {
+        const newProject = new Project(Math.random().toString(), // TODO: fix the id generation
+        title, description, people, status);
         this.projects.push(newProject);
+        this.updateListeners();
+    }
+    moveProject(projectId, newStatus) {
+        const project = this.projects.find((project) => project.id === projectId);
+        if (project) {
+            project.status = newStatus;
+            this.updateListeners();
+        }
+    }
+    updateListeners() {
         this.listeners.forEach((fn) => {
             fn(this.projects.slice());
         });
@@ -100,6 +111,7 @@ class ProjectItem extends Component {
     constructor(hostId, project) {
         super('single-project', hostId, false, project.id);
         this.project = project;
+        this.configure();
         this.renderContent();
     }
     get person() {
@@ -110,13 +122,26 @@ class ProjectItem extends Component {
             return `${this.project.people} persons`;
         }
     }
-    configure() { }
+    configure() {
+        this.element.addEventListener('dragstart', this.dragStartHandler);
+        this.element.addEventListener('dragend', this.dragEndHandler);
+    }
     renderContent() {
         this.element.querySelector('h2').textContent = this.project.title;
         this.element.querySelector('h3').textContent = this.person + ' assigned';
         this.element.querySelector('p').textContent = this.project.description;
     }
+    dragStartHandler(event) {
+        event.dataTransfer.setData('text/plain', this.project.id);
+        event.dataTransfer.effectAllowed = 'move';
+    }
+    dragEndHandler(event) {
+        console.log('drag end');
+    }
 }
+__decorate([
+    Autobind
+], ProjectItem.prototype, "dragStartHandler", null);
 // ProjectList class
 class ProjectList extends Component {
     constructor(type) {
@@ -127,6 +152,9 @@ class ProjectList extends Component {
         this.renderContent();
     }
     configure() {
+        this.element.addEventListener('dragover', this.dragOverHandler);
+        this.element.addEventListener('dragleave', this.dragLeaveHandler);
+        this.element.addEventListener('drop', this.dropHandler);
         projectState.addListener((projects) => {
             const relevantProjects = projects.filter((project) => {
                 if (this.type === 'active') {
@@ -154,7 +182,33 @@ class ProjectList extends Component {
             new ProjectItem(listId, project);
         }
     }
+    dragOverHandler(event) {
+        if (event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
+            event.preventDefault();
+            const listEl = this.element.querySelector('ul');
+            listEl.classList.add('droppable');
+        }
+    }
+    dropHandler(event) {
+        const projectId = event.dataTransfer.getData('text/plain');
+        projectState.moveProject(projectId, this.type === 'active' ? ProjectStatus.ACTIVE : ProjectStatus.FINISHED);
+        const listEl = this.element.querySelector('ul');
+        listEl.classList.remove('droppable');
+    }
+    dragLeaveHandler(event) {
+        const listEl = this.element.querySelector('ul');
+        listEl.classList.remove('droppable');
+    }
 }
+__decorate([
+    Autobind
+], ProjectList.prototype, "dragOverHandler", null);
+__decorate([
+    Autobind
+], ProjectList.prototype, "dropHandler", null);
+__decorate([
+    Autobind
+], ProjectList.prototype, "dragLeaveHandler", null);
 // ProjectInput class
 class ProjectInput extends Component {
     constructor() {
@@ -197,7 +251,7 @@ class ProjectInput extends Component {
             value: people,
             required: true,
             min: 1,
-            max: 5
+            max: 20000
         };
         if (!validation(titleValidatable) ||
             !validation(descriptionValidatable) ||
@@ -218,6 +272,10 @@ class ProjectInput extends Component {
 __decorate([
     Autobind
 ], ProjectInput.prototype, "submitHandler", null);
+// Initiate the app
 const projectInput = new ProjectInput();
 const activeProjects = new ProjectList('active');
 const finishedProjects = new ProjectList('finished');
+projectState.addProject('TikTok', 'A short video sharing platform used by almost a billion people around the world.', 10000, ProjectStatus.FINISHED);
+projectState.addProject('WeChat', 'An intant messaging app that is used by almost everyone in China.', 15000, ProjectStatus.FINISHED);
+projectState.addProject('Timeline', 'A timeline app in development that aims to help people learn history by visualizing the timeline.', 1, ProjectStatus.ACTIVE);
