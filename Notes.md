@@ -1245,11 +1245,11 @@ courseForm.addEventListener('submit', (event) => {
 
 ### Splitting Code Into Multiple Files
 
-> 1. To clearly track the project progress, I preserve the original one-file project at [orginal-project](./2-drag-and-drop/original-project/README.md)
+> 1. To clearly track the project progress and have a clear comparision of different approaches, I preserve the original one-file project at [orginal-project](./2-drag-and-drop/original-project/README.md)
 >
-> 2. The project splitted using TS namespaces can be found at [namespace-project](./2-2-drag-and-drop/namespace-project/README.md)
+> 2. The project splitted using TS namespaces can be found at [namespace-project](./2-drag-and-drop/namespace-project/README.md)
 >
-> 3. The project splitted using ES6 modules can be found at [es6-module-project](./2-drag-and-drop/es6-module-project/README.md)
+> 3. The project splitted using ES6 modules can be found at [es6-module-project](./2-drag-and-drop/es6-modules-project/README.md)
 
 #### TS approach - Namespaces & File Bunding
 
@@ -1296,3 +1296,25 @@ namespace App {
 - Use ES6 import/export syntax
 - Per-file compilation but single \<script\> import
 - Bundling via third-party tools (e.g. Webpack) is possible
+
+syntax:
+
+```javascript
+// export
+// in drag-drop-interfaces.ts
+export interface Draggable {
+  dragStartHandler(event: DragEvent): void
+  dragEndHandler(event: DragEvent): void
+}
+export interface DragTarget {
+  dragOverHandler(event: DragEvent): void
+  dragLeaveHandler(event: DragEvent): void
+  dropHandler(event: DragEvent): void
+}
+
+// import
+// in project-item.ts
+import { Draggable } from '../model/drag-drop-interfaces.js'
+```
+
+> Noted here, we are not using third party bundle tools such as *Webpack*. We are using the ES6 modules which is supported by modern browsers. So **we rely on browsers to import our files so we can't omit the .js suffix**.

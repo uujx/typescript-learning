@@ -23,4 +23,4 @@ A Drag and Drop project for practicing TypeScript.
 
 At first, the project was developed only for practicing TS so I wrote it in a [single big file](./2-drag-and-drop/original-project/README.md).
 
-Later, I splitted it with two approach: [TS namespaces](./2-2-drag-and-drop/namespace-project/README.md) and [ES6 modules](./2-drag-and-drop/es6-module-project/README.md).
+Later, I splitted it with two approach: [TS namespaces](./2-drag-and-drop/namespace-project/README.md) and [ES6 modules](./2-drag-and-drop/es6-modules-project/README.md). I kept all three projects so that you have a clear comparision of these approaches.
