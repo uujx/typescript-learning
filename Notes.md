@@ -1245,11 +1245,11 @@ courseForm.addEventListener('submit', (event) => {
 
 ### Splitting Code Into Multiple Files
 
-> 1. To clearly track the project progress and have a clear comparision of different approaches, I preserve the original one-file project at [orginal-project](./2-drag-and-drop/original-project/README.md)
+> 1. To clearly track the project progress and have a clear comparision of different approaches, I preserve the original one-file project at [orginal-project](./2-drag-and-drop/original-project/)
 >
-> 2. The project splitted using TS namespaces can be found at [namespace-project](./2-drag-and-drop/namespace-project/README.md)
+> 2. The project splitted using TS namespaces can be found at [namespace-project](./2-drag-and-drop/namespace-project/)
 >
-> 3. The project splitted using ES6 modules can be found at [es6-module-project](./2-drag-and-drop/es6-modules-project/README.md)
+> 3. The project splitted using ES6 modules can be found at [es6-module-project](./2-drag-and-drop/es6-modules-project/)
 
 #### TS approach - Namespaces & File Bunding
 
