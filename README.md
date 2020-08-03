@@ -20,3 +20,7 @@ A Drag and Drop project for practicing TypeScript.
 - You can create project with title, description and number of poeple involved.
 - Projects are divided in to two lists: active projects and finished projects.
 - You can drag a project from a list and drop it to the other.
+
+At first, the project was developed only for practicing TS so I wrote it in a [single big file](./2-drag-and-drop/original-project/README.md).
+
+Later, I splitted it with two approach: [TS namespaces](./2-2-drag-and-drop/namespace-project/README.md) and [ES6 modules](./2-drag-and-drop/es6-module-project/README.md).

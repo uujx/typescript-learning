@@ -1,0 +1,152 @@
+:root {
+  font-size: 10px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #1ABC9C;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+form {
+  margin-left: 20px;
+}
+
+.form-control {
+  margin: 20px;
+}
+
+label {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input,
+textarea {
+  width: 100%;
+  font-size: 1.6rem;
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  border-radius: 5px;
+  line-height: 1.6;
+}
+
+input:focus,
+textarea:focus {
+  border: 1px solid rgb(35, 102, 190);
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  background-color: #1ABC9C;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: white;
+  padding: 8px 10px;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 2px #EEE;
+  border: 1px solid #CCC;
+  cursor: pointer;
+  margin: 0 0 10px 20px;
+}
+
+.projects {
+  border-radius: 5px;
+  margin: 3rem;
+  width: 70%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #EDEFF1;
+}
+
+#active-projects {
+  border: 1px solid red;
+}
+
+#finished-projects {
+  border: 1px solid blue;
+}
+
+.projects header {
+  font-size: 1.8rem;
+  text-align: center;
+  font-weight: bolder;
+  padding: 1.6rem;
+}
+
+.projects header h2 {
+  margin: 0;
+  color: white;
+}
+
+#active-projects header {
+  background-color: #E74C3C;
+}
+
+#finished-projects header {
+  background-color: rgb(52, 101, 190);
+
+}
+
+.droppable {
+  background: #ffe3ee;
+}
+
+#finished-projects .droppable {
+  background: #ccdaff;
+}
+
+#user-input {
+  position: relative;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 1rem;
+  padding: 1rem;
+  background: #EDEFF1;
+  border-radius: 5px;
+}
+
+ul {
+  list-style: none;
+  font-size: 1.8rem;
+  padding: 5px 10%;
+  margin: 0;
+}
+
+li {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px #CCC;
+  padding: 10px;
+  cursor: pointer;
+  margin: 20px 0;
+  background: white;
+}
+
+li:hover {
+  box-shadow: 3px 3px 5px #BBB;
+}
+
+#active-projects li h2 {
+  color: rgb(240, 50, 91);
+}
+
+#finished-projects li h2 {
+  color: rgb(52, 101, 190)
+}

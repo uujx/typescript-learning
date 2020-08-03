@@ -58,6 +58,8 @@
     - [Validation with Decorators](#validation-with-decorators)
   - [Modules and Namespaces](#modules-and-namespaces)
     - [Splitting Code Into Multiple Files](#splitting-code-into-multiple-files)
+      - [TS approach - Namespaces & File Bunding](#ts-approach---namespaces--file-bunding)
+      - [JS approach - ES6 Imports/Exports](#js-approach---es6-importsexports)
 
 ## Basics and Types
 
@@ -1243,12 +1245,53 @@ courseForm.addEventListener('submit', (event) => {
 
 ### Splitting Code Into Multiple Files
 
-Namespaces & File Bunding:
+> 1. To clearly track the project progress, I preserve the original one-file project at [orginal-project](./2-drag-and-drop/original-project/README.md)
+>
+> 2. The project splitted using TS namespaces can be found at [namespace-project](./2-2-drag-and-drop/namespace-project/README.md)
+>
+> 3. The project splitted using ES6 modules can be found at [es6-module-project](./2-drag-and-drop/es6-module-project/README.md)
+
+#### TS approach - Namespaces & File Bunding
 
 - Use "namespace" code syntax to group code
 - Per-file or bundled compilation is possible (less imports to manage)
 
-ES6 Imports/Exports:
+syntax:
+
+```javascript
+// export
+// in drag-drop-interfaces.ts
+namespace App {
+  // exported things can be used in others files with the same namespace
+  export interface Draggable {
+    dragStartHandler(event: DragEvent): void
+    dragEndHandler(event: DragEvent): void
+  }
+
+  export interface DragTarget {
+    dragOverHandler(event: DragEvent): void
+    dragLeaveHandler(event: DragEvent): void
+    dropHandler(event: DragEvent): void
+  }
+}
+
+// import
+// in app.ts
+// 1. "///" - this is not a comment, but a special TS syntax
+// 2. However, this syntax only tells TS where to find the type. When compiled into JS, this link is destroied
+// 3. To preserve this relation, you need to use the "outFile" config in tsconfig.json, which concatenate all the files into one. You also need to change "module" to "amd".
+
+/// <reference path="drag-drop-interfaces.ts" />
+namespace App {
+  // this is where you use the above exported interfaces
+}
+```
+
+> **Problems of TS namespaces approach:**
+>
+> You need to manually add dependencies for each file. If you accidentally forgot to add a dependency for a file, there might not be any error in compilation, but it is pretty dangerous.
+
+#### JS approach - ES6 Imports/Exports
 
 - Use ES6 import/export syntax
 - Per-file compilation but single \<script\> import
