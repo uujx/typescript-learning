@@ -1,5 +1,11 @@
 # Drag and Drop Project
 
-This is the project structured with ES6 modules.
+This is the project with webpack.
 
-> Note that you can't omit the .js suffix when importing files as we are relying on browsers to import the files, not third party bundling tools such as Webpack
+To run this project:
+
+```bash
+npm install && npm start
+```
+
+The project would be opened on localhost:3000.
