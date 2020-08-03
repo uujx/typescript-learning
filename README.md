@@ -8,7 +8,7 @@ This repository records my notes and practicing projects in learning TypeScript.
 
 My learning Notes are included in _Notes.md_.
 
-- The notes are composed with a structure that starts from the basics of TS and then goes into the depth such as decorators. 
+- The notes are composed with a structure that starts from the basics of TS and then goes into the depth such as decorators.
 - You might need some JavaScript experience to not only know how to code in TS but to understand the mechanisms behind.
 
 ## 2. Drag & Drop Project

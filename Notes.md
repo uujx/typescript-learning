@@ -56,6 +56,8 @@
     - [Other Decorator Return Types](#other-decorator-return-types)
     - [Creating an 'Autobind' Decorator](#creating-an-autobind-decorator)
     - [Validation with Decorators](#validation-with-decorators)
+  - [Modules and Namespaces](#modules-and-namespaces)
+    - [Splitting Code Into Multiple Files](#splitting-code-into-multiple-files)
 
 ## Basics and Types
 
@@ -1234,3 +1236,20 @@ courseForm.addEventListener('submit', (event) => {
   console.log(createdCourse)
 })
 ```
+
+---
+
+## Modules and Namespaces
+
+### Splitting Code Into Multiple Files
+
+Namespaces & File Bunding:
+
+- Use "namespace" code syntax to group code
+- Per-file or bundled compilation is possible (less imports to manage)
+
+ES6 Imports/Exports:
+
+- Use ES6 import/export syntax
+- Per-file compilation but single \<script\> import
+- Bundling via third-party tools (e.g. Webpack) is possible
