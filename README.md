@@ -13,7 +13,7 @@ My learning Notes are included in _Notes.md_.
 
 ## 2. Drag & Drop Project
 
-[CodePen Project](https://codepen.io/uujx/pen/PoNYwOg)
+Here is project demo on [CodePen](https://codepen.io/uujx/pen/PoNYwOg)
 
 A Drag and Drop project for practicing TypeScript.
 
@@ -24,3 +24,5 @@ A Drag and Drop project for practicing TypeScript.
 At first, the project was developed only for practicing TS so I wrote it in a [single big file](./2-drag-and-drop/1-original-project/).
 
 Later, I splitted it with two approach: [TS namespaces](./2-drag-and-drop/2-namespace-project/) and [ES6 modules](./2-drag-and-drop/3-es6-modules-project/). I kept all three projects so that you have a clear comparision of these approaches.
+
+To solve the problem of too many HTTP requests brought by a lot of small js files, I then introduced webpack to the project as every modern frontend project would do. The complete project can be found at [webpack-project](./2-drag-and-drop/4-webpack-project/)
