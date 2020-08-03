@@ -60,6 +60,7 @@
     - [Splitting Code Into Multiple Files](#splitting-code-into-multiple-files)
       - [TS approach - Namespaces & File Bunding](#ts-approach---namespaces--file-bunding)
       - [JS approach - ES6 Imports/Exports](#js-approach---es6-importsexports)
+    - [Webpack](#webpack)
 
 ## Basics and Types
 
@@ -1245,11 +1246,11 @@ courseForm.addEventListener('submit', (event) => {
 
 ### Splitting Code Into Multiple Files
 
-> 1. To clearly track the project progress and have a clear comparision of different approaches, I preserve the original one-file project at [orginal-project](./2-drag-and-drop/original-project/)
+> 1. To clearly track the project progress and have a clear comparision of different approaches, I preserve the original one-file project at [orginal-project](./2-drag-and-drop/1-original-project/)
 >
-> 2. The project splitted using TS namespaces can be found at [namespace-project](./2-drag-and-drop/namespace-project/)
+> 2. The project splitted using TS namespaces can be found at [namespace-project](./2-drag-and-drop/2-namespace-project/)
 >
-> 3. The project splitted using ES6 modules can be found at [es6-module-project](./2-drag-and-drop/es6-modules-project/)
+> 3. The project splitted using ES6 modules can be found at [es6-module-project](./2-drag-and-drop/3-es6-modules-project/)
 
 #### TS approach - Namespaces & File Bunding
 
@@ -1317,4 +1318,28 @@ export interface DragTarget {
 import { Draggable } from '../model/drag-drop-interfaces.js'
 ```
 
-> Noted here, we are not using third party bundle tools such as *Webpack*. We are using the ES6 modules which is supported by modern browsers. So **we rely on browsers to import our files so we can't omit the .js suffix**.
+Noted here, we are not using third party bundle tools such as _Webpack_. We are using the ES6 modules which is supported by modern browsers. So **we rely on browsers to import our files so we can't omit the .js suffix**.
+
+> **Problem of ES6 modules**
+>
+> There is no bundling involved so we have a bunch of small js files, which means **a lot of HTTP requests**, slowing down our application.
+
+### Webpack
+
+> Webpack is a Bundling & Build tool
+
+Normal Setup:
+
+- A lot of js files and imports (many HTTP requests)
+- Unoptimized code (not as small as possible)
+- 'External' development server needed
+
+With Webpack:
+
+- Code bundles, less imports required
+- Optimized (minified) code, less code to download
+- More build steps can be added easily
+
+Here is the [project](./2-drag-and-drop/4-webpack-project/) equipped with webpack.
+
+---
